@@ -7,8 +7,10 @@ import AppAlert from "../utility/AppAlert";
 
 const Signup = () => {
 
-  console.log(import.meta.env.VITE_BASE_URL);
-  
+  //console.log(import.meta.env.VITE_BASE_URL);
+
+  const appAlert = AppAlert();
+
   const [name, setName] = useState('');
   const [phone, setPhone] = useState<number>();
   const [email, setEmail] = useState('');
@@ -52,34 +54,34 @@ const Signup = () => {
     resetErrorMsgs();
 
     if (name.length == 0) {
-      setInvalidNameError('Empty Name')
+      setInvalidNameError('Empty Name.')
       return
     }
     if (name.length > 50) {
-      setInvalidNameError('Max Length Should Be 50 Characters')
+      setInvalidNameError('Max Length Should Be 50 Characters.')
       return
     }
     if (email.length == 0) {
-      setInvalidEmailError('Empty Email')
+      setInvalidEmailError('Empty Email.')
       return
     }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      setInvalidEmailError('Wrong Email Format')
+      setInvalidEmailError('Wrong Email Format.')
       return
     }
     if (phone?.toString().length != 10 ) {
-      setInvalidPhoneError('Invalid Phone Number')
+      setInvalidPhoneError('Invalid Phone Number.')
       return
     }
     const usernameFormat = /^[A-Za-z][A-Za-z0-9_]{1,29}$/
     if (!usernameFormat.test(userName)) {
-      setInvalidUserNameError('Invalid User Name Format')
+      setInvalidUserNameError('Invalid User Name Format.')
       return
     }
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     if (!passwordRegex.test(password)) {
-      setInvalidPasswordError('Invalid Password')
+      setInvalidPasswordError('Invalid Password.')
     }
 
     // API Call
@@ -91,7 +93,14 @@ const Signup = () => {
       password: password
     })
     .then((response) => {
-      AppAlert("User Added", "SUCCESS")
+      if (response.status == 201) {
+        appAlert?.showAlert({message: "User Created", type: "SUCCESS", duration: 5000});
+      }
+    })
+    .catch((err) => {
+      if (err.response.status == 400) {
+        appAlert?.showAlert({message: err.response.data.error, type: "ERROR", duration: 5000});
+      }
     })
   }
 
@@ -99,7 +108,7 @@ const Signup = () => {
     <Container>
       <Card customCss="mx-auto my-14">
         <div className="border-b border-gray-200 pb-2 mb-2">
-          <h3 className="text-base font-semibold leading-6 text-gray-900">Signup</h3>
+          <h3 className="text-base font-semibold leading-6 text-gray-900">SignUp</h3>
         </div>
 
         {/* INPUT FIELDS */}
@@ -289,7 +298,7 @@ const Signup = () => {
             className="rounded-full bg-indigo-500 px-3.5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             onClick={handleSignup}
           >
-            Signup
+            SignUp
           </button>
         </div>
       </Card>

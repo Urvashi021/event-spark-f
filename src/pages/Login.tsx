@@ -1,9 +1,134 @@
-
+import Container from "../components/atoms/Container";
+import { ExclamationCircleIcon } from "@heroicons/react/20/solid";
+import Card from "../components/atoms/Card";
+import { useState } from "react";
 
 const Login = () => {
-  return (
-    <div>Login</div>
-  )
-}
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [invalidUsernameError, setInvalidUsernameError] = useState('');
+  const [invalidPasswordError, setInvalidPasswordError] = useState('');
 
-export default Login
+  const handleUsernameChange = (ev: any) => {
+    setUsername(ev.target.value);
+  }
+
+  const handlePasswordChange = (ev: any) => {
+    setPassword(ev.target.value)
+  }
+
+  const resetErrorMsgs = () => {
+    setInvalidUsernameError('');
+    setInvalidPasswordError('');
+  }
+
+  const handleLogin = () => {
+    resetErrorMsgs();
+
+    if (username.length == 0) {
+      setInvalidUsernameError('Empty Username.')
+      return
+    }
+    const usernameRegex = /^[A-Za-z][A-Za-z0-9_]{1,29}$/;
+    if (!usernameRegex.test(username)) {
+      setInvalidUsernameError('Wrong Username Format')
+      return
+    }
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (!passwordRegex.test(password)) {
+      setInvalidPasswordError('Invalid Password')
+    }
+
+    // API Call
+  }
+
+  return (
+    <Container>
+      <Card customCss="mx-auto my-14">
+        <div className="border-b border-gray-200 pb-2 mb-2">
+          <h3 className="text-base font-semibold leading-6 text-gray-900">Login</h3>
+        </div>
+        <div className="mx-auto">
+          <label
+            htmlFor="username"
+            className="block text-sm font-medium leading-6 text-gray-900"
+          >
+            Username
+          </label>
+          <div className="relative mt-2 rounded-md shadow-sm">
+            <input
+              type="text"
+              name="username"
+              id="username"
+              className={`${invalidUsernameError ? "text-red-900 ring-red-300 placeholder:text-red-300 focus:ring-red-500" : "" } block w-full rounded-md border-0 py-1.5 pr-10 ring-1 ring-inset focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6`}
+              placeholder="Username"
+              aria-invalid="true"
+              aria-describedby="username-error"
+              value={username}
+              onChange={handleUsernameChange}
+            />
+            { invalidUsernameError && (
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                <ExclamationCircleIcon
+                  className="h-5 w-5 text-red-500"
+                  aria-hidden="true"
+                />
+              </div>
+            )}
+          </div>
+          { invalidUsernameError && (
+            <p className="mt-2 text-sm text-red-600" id="email-error">
+              {invalidUsernameError}
+            </p>
+          )}
+        </div>
+
+        <div className="mx-auto max-w-md">
+          <label
+            htmlFor="username"
+            className="block text-sm font-medium leading-6 text-gray-900"
+          >
+            Password
+          </label>
+          <div className="relative mt-2 rounded-md shadow-sm">
+            <input
+              type="password"
+              name="password"
+              id="password"
+              className={`${invalidPasswordError ? "text-red-900 ring-red-300 placeholder:text-red-300 focus:ring-red-500" : "" } block w-full rounded-md border-0 py-1.5 pr-10 ring-1 ring-inset focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6`}
+              aria-invalid="true"
+              aria-describedby="password-error"
+              value={password}
+              onChange={handlePasswordChange}
+            />
+            { invalidPasswordError && (
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                <ExclamationCircleIcon
+                  className="h-5 w-5 text-red-500"
+                  aria-hidden="true"
+                />
+              </div>
+            )}
+          </div>
+          { invalidPasswordError && (
+            <p className="mt-2 text-sm text-red-600" id="email-error">
+              {invalidPasswordError}
+            </p>
+          )}
+        </div>
+
+        <div className="mt-4 flex justify-center">
+          <button
+            type="button"
+            className="rounded-full bg-indigo-500 px-3.5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            onClick={handleLogin}
+          >
+            Login
+          </button>
+        </div>
+      </Card>
+    </Container>
+  );
+};
+
+export default Login;

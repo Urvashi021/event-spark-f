@@ -6,10 +6,10 @@ import axios from "axios";
 import AppAlert from "../utility/AppAlert";
 
 const Login = () => {
-  const appAlert = AppAlert()
+  const appAlert = AppAlert()!;
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [invalidUsernameError, setInvalidUsernameError] = useState('');
+  const [invalidEmailError, setInvalidEmailError] = useState('');
   const [invalidPasswordError, setInvalidPasswordError] = useState('');
 
   const handleUsernameChange = (ev: any) => {
@@ -21,7 +21,7 @@ const Login = () => {
   }
 
   const resetErrorMsgs = () => {
-    setInvalidUsernameError('');
+    setInvalidEmailError('');
     setInvalidPasswordError('');
   }
 
@@ -29,12 +29,12 @@ const Login = () => {
     resetErrorMsgs();
 
     if (username.length == 0) {
-      setInvalidUsernameError('Empty Username.')
+      setInvalidEmailError('Empty Email.')
       return
     }
     const usernameRegex = /^[A-Za-z][A-Za-z0-9_]{1,29}$/;
     if (!usernameRegex.test(username)) {
-      setInvalidUsernameError('Wrong Username Format')
+      setInvalidEmailError('Wrong Email Format')
       return
     }
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
@@ -49,13 +49,13 @@ const Login = () => {
     })
     .then((response) => {
       if (response.status == 200) {
-        appAlert?.showAlert({message: "User Logged In", type: "SUCCESS", duration: 5000});
+        if (appAlert && appAlert.showAlert)
+          appAlert?.showAlert({message: "User Logged In", type: "SUCCESS", duration: 5000});
       }
     })
     .catch((err) => {
-      if (err.response.status == 400) {
+      if (appAlert && appAlert.showAlert)
         appAlert?.showAlert({message: err.response.data.error, type: "ERROR", duration: 5000});
-      }
     })
   }
 
@@ -77,14 +77,14 @@ const Login = () => {
               type="text"
               name="username"
               id="username"
-              className={`${invalidUsernameError ? "text-red-900 ring-red-300 placeholder:text-red-300 focus:ring-red-500" : "" } block w-full rounded-md border-0 py-1.5 pr-10 ring-1 ring-inset focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6`}
-              placeholder="Username"
+              className={`${invalidEmailError ? "text-red-900 ring-red-300 placeholder:text-red-300 focus:ring-red-500" : "" } block w-full rounded-md border-0 py-1.5 pr-10 ring-1 ring-inset focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6`}
+              placeholder=""
               aria-invalid="true"
-              aria-describedby="username-error"
+              aria-describedby="Email-error"
               value={username}
               onChange={handleUsernameChange}
             />
-            { invalidUsernameError && (
+            { invalidEmailError && (
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
                 <ExclamationCircleIcon
                   className="h-5 w-5 text-red-500"
@@ -93,16 +93,16 @@ const Login = () => {
               </div>
             )}
           </div>
-          { invalidUsernameError && (
+          { invalidEmailError && (
             <p className="mt-2 text-sm text-red-600" id="email-error">
-              {invalidUsernameError}
+              {invalidEmailError}
             </p>
           )}
         </div>
 
         <div className="mx-auto max-w-md">
           <label
-            htmlFor="username"
+            htmlFor="email"
             className="block text-sm font-medium leading-6 text-gray-900"
           >
             Password

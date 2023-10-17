@@ -1,28 +1,31 @@
-import { Fragment } from 'react'
-import { Disclosure, Menu, Transition } from '@headlessui/react'
+import { Disclosure } from '@headlessui/react'
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import EventSparkLogo from '../../assets/event-spark-logo.png'
 import { Link } from 'react-router-dom'
 
-const user = {
-  name: 'Tom Cook',
-  email: 'tom@example.com',
-  imageUrl:
-    'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-}
+// const user = {
+//   name: 'Tom Cook',
+//   email: 'tom@example.com',
+//   imageUrl:
+//     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+// }
+
 const navigation = [
   { name: 'Tech', href: '#', current: false },
   { name: 'Movie', href: '#', current: false },
   { name: 'Music', href: '#', current: false },
   { name: 'Standup', href: '#', current: false },
 ]
-const userNavigation = [
-  { name: 'Your Profile', href: '#' },
-  { name: 'Settings', href: '#' },
-  { name: 'Sign out', href: '#' },
+// const userNavigation = [
+//   { name: 'Your Profile', href: '#' },
+//   { name: 'Settings', href: '#' },
+//   { name: 'Sign out', href: '#' },
+// ]
+const userNavigationOnLogout =[
+{name:'Login', href:'login'},
+{name:'SignUp', href:'signup'},
 ]
-
 function classNames(...classes:any) {
   return classes.filter(Boolean).join(' ')
 }
@@ -145,7 +148,6 @@ export default function Header() {
                     Sign Up
                   </Link>
                 </div>
-                
               </div>
             </div>
             <nav className="hidden lg:flex lg:space-x-8 lg:py-2" aria-label="Global">
@@ -183,7 +185,7 @@ export default function Header() {
               ))}
             </div>
             <div className="border-t border-gray-700 pb-3 pt-4">
-              <div className="flex items-center px-4">
+              {/* <div className="flex items-center px-4"> 
                 <div className="flex-shrink-0">
                   <img className="h-10 w-10 rounded-full" src={user.imageUrl} alt="" />
                 </div>
@@ -199,9 +201,9 @@ export default function Header() {
                   <span className="sr-only">View notifications</span>
                   <BellIcon className="h-6 w-6" aria-hidden="true" />
                 </button>
-              </div>
+              </div> */}
               <div className="mt-3 space-y-1 px-2">
-                {userNavigation.map((item) => (
+                {/* {userNavigation.map((item) => ( 
                   <Disclosure.Button
                     key={item.name}
                     as="a"
@@ -210,6 +212,11 @@ export default function Header() {
                   >
                     {item.name}
                   </Disclosure.Button>
+                ))}*/}
+                {userNavigationOnLogout.map((item) => (
+                  <Link to={item.href} className='block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white'>
+                    {item.name}
+                  </Link>
                 ))}
               </div>
             </div>

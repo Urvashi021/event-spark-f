@@ -1,11 +1,14 @@
 import Container from "../components/atoms/Container";
 import { ExclamationCircleIcon } from "@heroicons/react/20/solid";
 import Card from "../components/atoms/Card";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { UserContext } from "../context/UserContext";
 import axios from "axios";
 import AppAlert from "../utility/AppAlert";
 
 const Login = () => {
+  const userContext = useContext(UserContext)
+  console.log(userContext);
   const appAlert = AppAlert()!;
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -49,15 +52,20 @@ const Login = () => {
     })
     .then((response) => {
       if (response.status == 200) {
-        if (appAlert && appAlert.showAlert)
+        if (appAlert && appAlert.showAlert){
           appAlert?.showAlert({message: "User Logged In", type: "SUCCESS", duration: 5000});
+          userContext.setUserInfo({
+            userId: response.data.data.userId,
+            username: response.data.data.username
+          })
+        }
       }
     })
     .catch((err) => {
       if (appAlert && appAlert.showAlert)
         appAlert?.showAlert({message: err.response.data.error, type: "ERROR", duration: 5000});
-    })
-  }
+      })
+    }
 
   return (
     <Container>

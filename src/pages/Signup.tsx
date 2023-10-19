@@ -12,7 +12,7 @@ const Signup = () => {
   const appAlert = AppAlert();
 
   const [name, setName] = useState('');
-  const [phone, setPhone] = useState<number>();
+  const [phone, setPhone] = useState<number | ''>();
   const [email, setEmail] = useState('');
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
@@ -49,7 +49,13 @@ const Signup = () => {
     setInvalidUserNameError('');
     setInvalidPasswordError('');
   }
-
+  const resetInputFields = () => {
+    setName('')
+    setEmail('')
+    setPhone('')
+    setUserName('')
+    setPassword('')
+  }
   const handleSignup = () => {
     resetErrorMsgs();
 
@@ -74,7 +80,7 @@ const Signup = () => {
       setInvalidPhoneError('Invalid Phone Number.')
       return
     }
-    const usernameFormat = /^[A-Za-z][A-Za-z0-9_]{1,29}$/
+    const usernameFormat = /^[A-Za-z][A-Za-z0-9_]{1,29}$/;
     if (!usernameFormat.test(userName)) {
       setInvalidUserNameError('Invalid User Name Format.')
       return
@@ -94,9 +100,10 @@ const Signup = () => {
     })
     .then((response) => {
       if (response.status == 201) {
-        if (appAlert && appAlert.showAlert)
-        appAlert?.showAlert({message: "User Created", type: "SUCCESS", duration: 5000});     
-       }
+        if (appAlert && appAlert.showAlert){
+        appAlert?.showAlert({message: "User Created.", type: "SUCCESS", duration: 5000});     
+        resetInputFields()
+      }}
     })
     .catch((err) => {
       if (err.response.status == 400) {

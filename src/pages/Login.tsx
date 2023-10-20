@@ -51,30 +51,32 @@ const Login = () => {
     axios.post(`${import.meta.env.VITE_BASE_URL}/api/v1/auth/login`, {
       username: username,
       password: password
+    }, {
+      withCredentials: true
     })
-    .then((response) => {
-      if (response.status == 200) {
-        if (appAlert && appAlert.showAlert){
-          appAlert?.showAlert({message: "User Logged In", type: "SUCCESS", duration: 5000});
-          userContext.setUserInfo({
-            userId: response.data.data.userId,
-            username: response.data.data.username,
-            name: response.data.data.name,
-            email: response.data.data.email,
-          })
-          setRedirectToHome(true)
+      .then((response) => {
+        if (response.status == 200) {
+          if (appAlert && appAlert.showAlert) {
+            appAlert?.showAlert({ message: "User Logged In", type: "SUCCESS", duration: 5000 });
+            userContext.setUserInfo({
+              userId: response.data.data.userId,
+              username: response.data.data.username,
+              name: response.data.data.name,
+              email: response.data.data.email,
+            })
+            setRedirectToHome(true)
+          }
         }
-      }
-    })
-    .catch((err) => {
-      if (appAlert && appAlert.showAlert)
-        appAlert?.showAlert({message: err.response.data.error, type: "ERROR", duration: 5000});
       })
-    }
-    if (redirectToHome) {
-      return <Navigate to={'/'} />
-    }
-    
+      .catch((err) => {
+        if (appAlert && appAlert.showAlert)
+          appAlert?.showAlert({ message: err.response.data.error, type: "ERROR", duration: 5000 });
+      })
+  }
+  if (redirectToHome) {
+    return <Navigate to={'/'} />
+  }
+
   return (
     <Container>
       <Card customCss="mx-auto my-14">
@@ -93,14 +95,14 @@ const Login = () => {
               type="text"
               name="username"
               id="username"
-              className={`${invalidEmailError ? "text-red-900 ring-red-300 placeholder:text-red-300 focus:ring-red-500" : "" } block w-full rounded-md border-0 py-1.5 pr-10 ring-1 ring-inset focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6`}
+              className={`${invalidEmailError ? "text-red-900 ring-red-300 placeholder:text-red-300 focus:ring-red-500" : ""} block w-full rounded-md border-0 py-1.5 pr-10 ring-1 ring-inset focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6`}
               placeholder=""
               aria-invalid="true"
               aria-describedby="Email-error"
               value={username}
               onChange={handleUsernameChange}
             />
-            { invalidEmailError && (
+            {invalidEmailError && (
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
                 <ExclamationCircleIcon
                   className="h-5 w-5 text-red-500"
@@ -109,7 +111,7 @@ const Login = () => {
               </div>
             )}
           </div>
-          { invalidEmailError && (
+          {invalidEmailError && (
             <p className="mt-2 text-sm text-red-600" id="email-error">
               {invalidEmailError}
             </p>
@@ -128,13 +130,13 @@ const Login = () => {
               type="password"
               name="password"
               id="password"
-              className={`${invalidPasswordError ? "text-red-900 ring-red-300 placeholder:text-red-300 focus:ring-red-500" : "" } block w-full rounded-md border-0 py-1.5 pr-10 ring-1 ring-inset focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6`}
+              className={`${invalidPasswordError ? "text-red-900 ring-red-300 placeholder:text-red-300 focus:ring-red-500" : ""} block w-full rounded-md border-0 py-1.5 pr-10 ring-1 ring-inset focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6`}
               aria-invalid="true"
               aria-describedby="password-error"
               value={password}
               onChange={handlePasswordChange}
             />
-            { invalidPasswordError && (
+            {invalidPasswordError && (
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
                 <ExclamationCircleIcon
                   className="h-5 w-5 text-red-500"
@@ -143,7 +145,7 @@ const Login = () => {
               </div>
             )}
           </div>
-          { invalidPasswordError && (
+          {invalidPasswordError && (
             <p className="mt-2 text-sm text-red-600" id="email-error">
               {invalidPasswordError}
             </p>
